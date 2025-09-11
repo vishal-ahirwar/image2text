@@ -12,19 +12,15 @@ class OcrtestConan(ConanFile):
     }
     default_options = {
         "shared": False,
-        "fPIC": True,
-        "build_app": False
+        "fPIC": False,
+        "build_app": False,
+        "tesseract/*:with_libarchive": False
     }
     # Make sure to export ALL necessary source code.
     exports_sources = "CMakeLists.txt", "libs/*","cmake/*"
-    def configure(self):
-            self.output.info("Forcing compiler.cppstd=20")
-            self.settings.compiler.cppstd = "20"
-            # Let's check the value right after setting it
-            self.output.info(f"Value is now: {self.settings.compiler.cppstd}")
 
     def requirements(self):
-        self.requires("fmt/11.2.0")
+        # self.requires("cpu_features/0.10.1")
         # self.requires("cpr/1.12.0")
         self.requires("tesseract/5.5.0")
         if self.options.build_app:  # Only for the app
@@ -40,6 +36,7 @@ class OcrtestConan(ConanFile):
         tc = CMakeToolchain(self)
         #NOTE: This is if you want to publish apps with libs too
         tc.variables["BUILD_APPLICATION"] = self.options.build_app
+
         tc.generate()
 
     def build(self):
@@ -52,18 +49,19 @@ class OcrtestConan(ConanFile):
         cmake.install()
 
     def package_info(self):
+        pass
         # Define the "utils" library component
-        self.cpp_info.components["utils"].libs = ["utils"]
-        self.cpp_info.components["utils"].requires=["fmt::fmt"]
-        # Define the "utils" library component
-        self.cpp_info.components["easyproc"].libs = ["easyproc"]
-        self.cpp_info.components["easyproc"].requires=["reproc::reproc"]
-        # # CRITICAL: Declare ALL public dependencies for the 'utils' component.
-        self.cpp_info.components["commands"].libs = ["commands"]
-        self.cpp_info.components["commands"].requires=["fmt::fmt"]
-        # # Define the "downloader" library component
-        self.cpp_info.components["downloader"].libs = ["downloader"]
-        self.cpp_info.components["downloader"].requires = ["utils","cpr::cpr","nlohmann_json::nlohmann_json"] # Example if downloader depends on utils
+        # self.cpp_info.components["utils"].libs = ["utils"]
+        # self.cpp_info.components["utils"].requires=["fmt::fmt"]
+        # # Define the "utils" library component
+        # self.cpp_info.components["easyproc"].libs = ["easyproc"]
+        # self.cpp_info.components["easyproc"].requires=["reproc::reproc"]
+        # # # CRITICAL: Declare ALL public dependencies for the 'utils' component.
+        # self.cpp_info.components["commands"].libs = ["commands"]
+        # self.cpp_info.components["commands"].requires=["fmt::fmt"]
+        # # # Define the "downloader" library component
+        # self.cpp_info.components["downloader"].libs = ["downloader"]
+        # self.cpp_info.components["downloader"].requires = ["utils","cpr::cpr","nlohmann_json::nlohmann_json"] # Example if downloader depends on utils
 
         # # Define the "generator" library component
         # self.cpp_info.components["generator"].libs = ["generator"]

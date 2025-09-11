@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include<QClipboard>
-#include <fmt/base.h>
 #include<tesseract/baseapi.h>
 #include<QMessageBox>
 #include<QFileDevice>
